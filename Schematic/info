@@ -1,0 +1,334 @@
+{
+  "uuid": "21d6473c9cb07c1b61b2966ba561576f",
+  "path": "Offline/Vehicle_Tracking_System",
+  "name": "Vehicle_Tracking_System",
+  "content": "",
+  "created_at": "2023-11-12 18:59:47",
+  "updated_at": "2023-11-12 19:07:59",
+  "stick": "",
+  "documents": [
+    {
+      "uuid": "14b14768a0c65ce327d77a8dfd5073a9",
+      "title": "Sheet_1",
+      "description": "",
+      "docType": "1",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {
+        "9555bd15c8d94fdfaa102b882caca86f": 1,
+        "97a7020bd0ee494abf9feeb3b6a56d6f": 2,
+        "0b833263bcfb409d8a029dcd9c6a3b59": 2,
+        "7809ed3ba7c24a14936ce2a66b37ccdb": 1,
+        "c55bcb4b11ea4b65b1fb93c4ed4ad29a": 1,
+        "eaa76950fd7343a1953943ee7b9978d3": 2,
+        "2042a58972684f90938c0f605fbbeb2c": 1,
+        "a7291ceaee5442a999df26c55c7e675d": 1,
+        "bb009484ef804a24ac5d18c54b249586": 2,
+        "5cbe824183374fac8e4c1ae848199ce3": 2,
+        "fc99939804a3412392fced92eb460724": 1,
+        "e33cc1be9d5e4d929dda60b4eb023d72": 1,
+        "3ec77201bbcd4ecd8722658d581a4e60": 1,
+        "a7a0e276dadd4f8097422d2afc2e1b9c": 2,
+        "d1ddd05bafb64ea0a3b75fd101965e4e": 1
+      },
+      "BOM": [
+        [
+          "Value",
+          "Quantity",
+          "Package",
+          "Components",
+          "CustomPara"
+        ],
+        [
+          "1000uF",
+          1,
+          "CASE-A_3216",
+          "C1",
+          {
+            "Supplier Part": "",
+            "Supplier": "",
+            "Contributor": "LCEDA_Lib",
+            "spiceSymbolName": "C_Tan_SMD_A_US",
+            "Manufacturer Part": "",
+            "puuid": "ce25118ef0b041b8a773e71ca28ae65d",
+            "uuid": "a7a0e276dadd4f8097422d2afc2e1b9c"
+          }
+        ],
+        [
+          "10uF",
+          1,
+          "CASE-A_3216",
+          "C2",
+          {
+            "Supplier Part": "",
+            "Supplier": "",
+            "Contributor": "LCEDA_Lib",
+            "spiceSymbolName": "C_Tan_SMD_A_US",
+            "Manufacturer Part": "",
+            "puuid": "ce25118ef0b041b8a773e71ca28ae65d",
+            "uuid": "a7a0e276dadd4f8097422d2afc2e1b9c"
+          }
+        ],
+        [
+          "1N4007W",
+          1,
+          "SOD-123_L2.8-W1.8-LS3.7-RD",
+          "D1",
+          {
+            "Supplier": "LCSC",
+            "Supplier Part": "C328592",
+            "Manufacturer": "BLUE ROCKET",
+            "Manufacturer Part": "1N4007W",
+            "Contributor": "LCEDA_Lib",
+            "spiceSymbolName": "1N4007W",
+            "puuid": "60a676d313ae48718a81c380b73dfe4f",
+            "uuid": "e33cc1be9d5e4d929dda60b4eb023d72"
+          }
+        ],
+        [
+          "GSM Module",
+          1,
+          "HDR-F-2.54_1X8",
+          "H1",
+          {
+            "Supplier Part": "C225505",
+            "Supplier": "LCSC",
+            "Manufacturer": "",
+            "Manufacturer Part": "",
+            "Contributor": "LCEDA_Lib",
+            "spiceSymbolName": "HDR-F-2.54_1x8",
+            "puuid": "76a028e0363649388f2a2e340a157455",
+            "uuid": "7809ed3ba7c24a14936ce2a66b37ccdb"
+          }
+        ],
+        [
+          "GPS Module",
+          1,
+          "HDR-F-2.54_1X4",
+          "H2",
+          {
+            "Supplier Part": "C225501",
+            "Supplier": "LCSC",
+            "Manufacturer": "",
+            "Manufacturer Part": "",
+            "Contributor": "LCEDA_Lib",
+            "spiceSymbolName": "HDR-F-2.54_1x4",
+            "puuid": "21473b495b6340c992965357d5701779",
+            "uuid": "eaa76950fd7343a1953943ee7b9978d3"
+          }
+        ],
+        [
+          "GAS_SENSOR",
+          1,
+          "HDR-F-2.54_1X4",
+          "H3",
+          {
+            "Supplier Part": "C225501",
+            "Supplier": "LCSC",
+            "Manufacturer": "",
+            "Manufacturer Part": "",
+            "Contributor": "LCEDA_Lib",
+            "spiceSymbolName": "HDR-F-2.54_1x4",
+            "puuid": "21473b495b6340c992965357d5701779",
+            "uuid": "eaa76950fd7343a1953943ee7b9978d3"
+          }
+        ],
+        [
+          "VIBRATION_SENSOR",
+          1,
+          "HDR-F-2.54_1X3",
+          "H5",
+          {
+            "Supplier Part": "C146690",
+            "Supplier": "LCSC",
+            "Manufacturer": "",
+            "Manufacturer Part": "",
+            "image": "",
+            "Contributor": "LCEDA_Lib",
+            "spiceSymbolName": "HDR-F-2.54_1x3",
+            "puuid": "f83673d09e13450d934ca6be4be5af8f",
+            "uuid": "a7291ceaee5442a999df26c55c7e675d"
+          }
+        ],
+        [
+          "LED-0603_R",
+          2,
+          "LED0603_RED",
+          "LED1,LED2",
+          {
+            "Manufacturer": "EVERLIGHT(台湾亿光)",
+            "Manufacturer Part": "19-217/R6C-AL1M2VY/3T",
+            "Supplier Part": "C72044",
+            "Supplier": "LCSC",
+            "link": "",
+            "Contributor": "LCEDA_01",
+            "spiceSymbolName": "LED-0603_R",
+            "puuid": "1efb3a885b5b4aecb6d41221a8f4d86b",
+            "uuid": "5cbe824183374fac8e4c1ae848199ce3"
+          }
+        ],
+        [
+          "Battery",
+          1,
+          "HDR-F-2.54_1X2",
+          "P1",
+          {
+            "Supplier Part": "C49661",
+            "Supplier": "LCSC",
+            "Manufacturer": "",
+            "Manufacturer Part": "",
+            "image": "",
+            "Contributor": "LCEDA_Lib",
+            "spiceSymbolName": "HDR-F-2.54_1x2",
+            "puuid": "36b1306a115341f4b4d9407fb34974e0",
+            "uuid": "3ec77201bbcd4ecd8722658d581a4e60"
+          }
+        ],
+        [
+          "2N2222",
+          2,
+          "TO-92-3_L4.9-W3.7-P1.27-L",
+          "Q1,Q2",
+          {
+            "Contributor": "LCSC",
+            "Supplier": "LCSC",
+            "Manufacturer": "ST(先科)",
+            "Manufacturer Part": "2N2222A",
+            "Supplier Part": "C118536",
+            "JLCPCB Part Class": "Extended Part",
+            "link": "https://lcsc.com/eda_search?q=C118536&%26type=1&ref=editor",
+            "spiceSymbolName": "2N2222",
+            "puuid": "6924b36489de4921bb29ca14bf27c33f",
+            "uuid": "0b833263bcfb409d8a029dcd9c6a3b59"
+          }
+        ],
+        [
+          "1k",
+          2,
+          "R0603",
+          "R1,R2",
+          {
+            "Supplier Part": "",
+            "Supplier": "",
+            "Contributor": "LCEDA_Lib",
+            "spiceSymbolName": "R_0603_EU",
+            "Manufacturer Part": "",
+            "puuid": "398691f1f785460098bbe5ee6590333c",
+            "uuid": "bb009484ef804a24ac5d18c54b249586"
+          }
+        ],
+        [
+          "ATMEGA32-16PU",
+          1,
+          "DIP-40_L52.3-W13.9-P2.54-LS15.2-BL",
+          "U1",
+          {
+            "Contributor": "LCSC",
+            "Supplier": "LCSC",
+            "Supplier Part": "C1337273",
+            "Manufacturer": "MICROCHIP(美国微芯)",
+            "Manufacturer Part": "ATMEGA32-16PU",
+            "JLCPCB Part Class": "Extended Part",
+            "link": "https://lcsc.com/eda_search?q=C1337273&%26type=1&ref=editor",
+            "spiceSymbolName": "ATMEGA32-16PU",
+            "puuid": "b92daa500f004b90a2ea0718943f8a91",
+            "uuid": "9555bd15c8d94fdfaa102b882caca86f"
+          }
+        ],
+        [
+          "RELAY-SPST",
+          2,
+          "RELAY-TH_RELAY-SPST",
+          "U2,U4",
+          {
+            "Contributor": "LCSC",
+            "Supplier": "LCSC",
+            "Supplier Part": "C2941249",
+            "Manufacturer": "null",
+            "Manufacturer Part": "Relay-SPST",
+            "JLCPCB Part Class": "Extended Part",
+            "link": "https://lcsc.com/eda_search?q=C2941249&%26type=1&ref=editor",
+            "spiceSymbolName": "RELAY-SPST",
+            "puuid": "b0358ef082e44cf3bf218d24e9c86cfe",
+            "uuid": "97a7020bd0ee494abf9feeb3b6a56d6f"
+          }
+        ],
+        [
+          "LM016L",
+          1,
+          "LM016L",
+          "U3",
+          {
+            "Manufacturer Part": "LCD LM016L 16x2",
+            "Contributor": "salindasym",
+            "spiceSymbolName": "LM016L",
+            "puuid": "",
+            "uuid": "c55bcb4b11ea4b65b1fb93c4ed4ad29a"
+          }
+        ],
+        [
+          "5V BUZZER",
+          1,
+          "5V BUZZER",
+          "U5",
+          {
+            "Manufacturer": "",
+            "Manufacturer Part": "",
+            "Supplier Part": "",
+            "Supplier": "",
+            "link": "",
+            "Contributor": "diontarrant",
+            "spiceSymbolName": "5V BUZZER",
+            "puuid": "acf05ea0daf34a849f578ce090b24589",
+            "uuid": "2042a58972684f90938c0f605fbbeb2c"
+          }
+        ],
+        [
+          "FUSE_0.5A",
+          1,
+          "FUSE-TH_L8.9-W2.0-P5.00-D0.6-S0.80",
+          "U6",
+          {
+            "Contributor": "lcsc",
+            "Supplier": "LCSC",
+            "Supplier Part": "C9900015003",
+            "Manufacturer": "null",
+            "Manufacturer Part": "Fuse_0.5A",
+            "JLCPCB Part Class": "Extended Part",
+            "link": "https://lcsc.com/eda_search?q=C9900015003&%26type=1&ref=editor",
+            "spiceSymbolName": "FUSE_0.5A",
+            "puuid": "a612de0ab9b841768a686934f1689017",
+            "uuid": "fc99939804a3412392fced92eb460724"
+          }
+        ],
+        [
+          "L7805",
+          1,
+          "TO-220AB-3_L10.4-W4.6-P2.54-L",
+          "U7",
+          {
+            "Contributor": "lcsc",
+            "Supplier": "LCSC",
+            "Supplier Part": "C7426851",
+            "Manufacturer": "SY(顺烨）",
+            "Manufacturer Part": "L7805",
+            "link": "https://lcsc.com/eda_search?q=C7426851&%26type=1&ref=editor",
+            "spiceSymbolName": "L7805",
+            "puuid": "71aebd58c7824830842a92f8ee64b06a",
+            "uuid": "d1ddd05bafb64ea0a3b75fd101965e4e"
+          }
+        ]
+      ],
+      "updateTime": 1699808879,
+      "createTime": 1699808387,
+      "histories": [],
+      "created_at": "2023-11-12 18:59:47",
+      "updated_at": "2023-11-12 19:07:59"
+    }
+  ],
+  "sort": [],
+  "title": "Vehicle_Tracking_System",
+  "foldername": "Vehicle_Tracking_System",
+  "schfilename": "Vehicle_Tracking_System.json",
+  "schfilemtime": 1699808879352
+}
