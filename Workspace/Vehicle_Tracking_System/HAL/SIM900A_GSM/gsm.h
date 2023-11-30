@@ -11,7 +11,7 @@
 #include "../../Utils/std_types.h"
 #include "../../Utils/common_macros.h"
 #include "../../MCAL/USART/usart.h"
-#include "util/delay.h"
+#include <util/delay.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -39,9 +39,9 @@
  *******************************************************************************/
 
 boolean GSM_init(char * message_buffer);
-boolean GSM_isMsgReceived(char * message_buffer);
+boolean GSM_isMsgReceived(char * message_buffer, char * message_location);
 boolean GSM_readMsgContents(char * message_location, char * message_buffer, char * sender_number, char * recieved_message);
-void GSM_sendMsg(char * number, char * message_to_send);
+void GSM_sendMsg(char * number, char * message_to_send, char * message_buffer, char * buff_ptr);
 void GSM_deleteMsg(char *message_location);
 void GSM_deleteAllMsgs(void);
 

@@ -60,12 +60,15 @@ boolean GSM_readMsgContents(char * message_location, char * message_buffer, char
 			sender_number[i] = message_buffer[buf_ptr];
 			buf_ptr++;
 		}
+		sender_number[i] = '\0';
 		while(message_buffer[buf_ptr++]!= '\n'); /*to get the message*/
 		i = 0;
 		while ( (i < REC_MSG_MAX_LENGTH) && (message_buffer[buf_ptr] != '\r')){
 			recieved_message[i] = message_buffer[buf_ptr];
+			i++;
 			buf_ptr++;
 		}
+		recieved_message[i] = '\0';
 		memset(message_buffer,0,MSG_BUFFER_SIZE);
 		return TRUE;
 	}
