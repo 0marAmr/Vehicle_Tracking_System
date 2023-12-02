@@ -14,6 +14,18 @@
 
 #include "usart.h"
 
+static volatile void (*g_USART_Call_Back_Ptr)(void);
+
+void USART_setCallBackFunction(void (*Fun_Ptr)(void)){
+	g_USART_Call_Back_Ptr = Fun_Ptr;
+}
+
+ISR(USART_RXC_vect){
+
+	(*g_USART_Call_Back_Ptr)();
+}
+
+
 /*******************************************************************************
  *                     		 Functions Definitions                             *
  *******************************************************************************/

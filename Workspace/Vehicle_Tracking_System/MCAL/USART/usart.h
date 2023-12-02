@@ -17,6 +17,7 @@
 
 #include "../../Utils/std_types.h"
 #include "../../Utils/common_macros.h"
+#include <util/delay.h>
 
 /*******************************************************************************
  *                                Definitions                                  *
