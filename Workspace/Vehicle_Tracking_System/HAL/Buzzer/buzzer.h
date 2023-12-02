@@ -15,7 +15,7 @@
 
 #include "../../Utils/std_types.h"
 
-#define BUZZER_PORT_ID		PORTD_ID
+#define BUZZER_PORT_ID		PORTB_ID
 #define BUZZER_PIN_ID		PIN2_ID
 
 /*******************************************************************************

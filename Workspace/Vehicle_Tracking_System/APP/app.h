@@ -11,14 +11,17 @@
 #include "../HAL/SIM900A_GSM/gsm.h"
 #include "../HAL/Buzzer/buzzer.h"
 #include "../HAL/LCD/lcd.h"
+#include "../HAL/Sensors/MQ9/co_sensor.h"
 #include "../MCAL/USART/usart.h"
 #include "../MCAL/Timer/timer.h"
 #include "../MCAL/GPIO/gpio.h"
+#include "../MCAL/ADC/adc.h"
+
 #include <util/delay.h>
 
 #define DEF_CONFIRMATION_CODE       "VTS100"
 #define NUM_BOOK_START_ADDR         0x000A
-#define TIMER1_COMPARE_VALUE_5SEC   40960
+#define TIMER1_COMPARE_VALUE_3SEC   24576
 
 typedef enum{
 	GPS, GSM

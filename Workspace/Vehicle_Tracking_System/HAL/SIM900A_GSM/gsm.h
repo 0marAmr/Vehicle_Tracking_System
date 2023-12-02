@@ -21,8 +21,10 @@
 #define MSG_BUFFER_SIZE 		256
 #define MSG_LOC_BUFFER_SIZE 	4
 #define DIAL_NO_LENGTH 			14
+#define CONF_CODE_LENGTH 	    6
 #define REC_MSG_MAX_LENGTH		16
-#define TRANS_MSG_MAX_LENGTH    100
+#define LOCATION_HLINK_LENGTH   100
+#define TRANS_MSG_MAX_LENGTH    150
 
 /*"E0" turns off the echoing of characters. When echoing is off,
  * the module will not repeat back the characters it receives from the host (MCU).

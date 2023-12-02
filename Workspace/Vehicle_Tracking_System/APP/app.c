@@ -7,24 +7,59 @@
 
 #include "app.h"
 
-char g_msg_buff [MSG_BUFFER_SIZE]; /*you might want to consider dynamic allocation*/
+/*******************************************************************************
+ *                     	   	  Global Variables                                 *
+ *******************************************************************************/
+
+char g_msg_buff [MSG_BUFFER_SIZE];        
+char g_contact_number [DIAL_NO_LENGTH];
+char g_confirmation_code [CONF_CODE_LENGTH];
 boolean g_info_received_flag = FALSE;
 volatile char g_buff_index = 0;
 
-/**/
-uint16 g_numbers_end_addr;
+/*from EEPROM*/
+uint8 g_code_config_flag;
+uint8 g_no_of_contacts;
 
 uint8 g_timer1_tick = 0;
+
+float32 g_Ro;
+
+
+/*******************************************************************************
+ *                      Functions Prototypes(Private)                          *
+ *******************************************************************************/
+
+// add prototypes here
+
+
+/*******************************************************************************
+ *                     		 Functions Definitions                             *
+ *******************************************************************************/
 
 void APP_init(void){
     APP_switchUARTAccess(GSM);
     while(!GSM_init(g_msg_buff)){
-		LCD_displayStringRowColumn(0,0,"Detecting GSM Module");
+        LCD_clearScreen();
+		LCD_displayStringRowColumn(0,0,"   Detecting");
+		LCD_displayStringRowColumn(1,0,"  GSM Module");
 	}
     APP_flushBuffer();
+    /* get number of contacts saved in EEPROM (saved in address 7 by default)*/
+    g_code_config_flag = EEPROM_read(6); 
+    g_no_of_contacts = EEPROM_read(7); 
+
+    if (!(g_code_config_flag == '$')){ /*special char that indicates the code has been configured*/
+        APP_defaultConfirmCode();
+    }
     
-    /*read values from EEPROM (by default end address is stored at addresses 6, 7 )*/
-    g_numbers_end_addr = 6;   // EEPROM_read(7) +  
+}
+
+void APP_MQSenCalibration(){
+    LCD_clearScreen();
+	LCD_displayStringRowColumn(0,0,"Calibrating MQ");
+    g_Ro = MQ_sensorCalibration();
+	LCD_displayStringRowColumn(0,0,"Calibration Done !");
 }
 
 boolean APP_isMsgReceived(char * sender_number, char * received_msg){
@@ -34,6 +69,7 @@ boolean APP_isMsgReceived(char * sender_number, char * received_msg){
         if(GSM_isMsgReceived(g_msg_buff, msg_location)){
 		    APP_flushBuffer();
 		    if(!GSM_readMsgContents(msg_location, g_msg_buff, sender_number, received_msg)){
+                LCD_clearScreen();
 		    	LCD_displayStringRowColumn(0,0,"Msg Receiving Error !");
 		        APP_flushBuffer();
                 return FALSE;
@@ -43,6 +79,7 @@ boolean APP_isMsgReceived(char * sender_number, char * received_msg){
 		    	LCD_displayString(sender_number);
 		    	LCD_displayStringRowColumn(1, 0,received_msg);
 		        APP_flushBuffer();
+                GSM_deleteMsg(msg_location); /*preserve space*/
                 return TRUE;
             }
         }
@@ -93,12 +130,12 @@ void APP_decodeMsg(char * number, char * received_msg, TIMER_ConfigType * const 
 
     switch (received_msg[0]){
         case 'L':
-            APP_sendCoordinates(number);
+            APP_sendCoordinates(number, "Location: ");
         break;
         case 'B':
             BUZZER_start();
             TIMER_init(timer1_configPtr);
-            while (g_timer1_tick < 1);
+            while (g_timer1_tick < 2);
 	        TIMER_deInit(TIMER1_ID);
             BUZZER_start();
             g_timer1_tick = 0;
@@ -106,34 +143,85 @@ void APP_decodeMsg(char * number, char * received_msg, TIMER_ConfigType * const 
     }
 }
 
-void APP_flushBuffer(){
+static void APP_flushBuffer(){
 	memset(g_msg_buff,0,MSG_BUFFER_SIZE);
     g_buff_index = 0;
 }
 
-
-boolean APP_findNumber(char * number){
-    char fetched_number [14];
-    fetched_number[13] = '/0';
-    /*read 13 characters from eeprom*/
-    // return 0 if not found
-}
-
-boolean APP_strCmp(char * str1, char * str2){
+static boolean APP_strCmp(char * str1, char * str2){
     return strcmp(str1, str2) == 0;
 }
 
-boolean APP_codeCheck(char * message){
-    char * code_to_check = message + 4;
-    // char actual_code [6] =  EEPROM(fetch 1st 6 bytes)
-    // return APP_strCmp(code_to_check, actual_code);
+static void APP_strCat(char * result, const char * str1, const char * str2) {
+    char *resultPtr = result;
+    while (*str1 != '\0') {
+        *resultPtr = *str1;
+        resultPtr++;
+        str1++;
+    }
+    while (*str2 != '\0') {
+        *resultPtr = *str2;
+        resultPtr++;
+        str2++;
+    }
+    *resultPtr = '\0';
 }
 
-void APP_storeNewEntry(char * number){
+static boolean APP_isSUbStr(const char *str, const char *sub) {
+    while (*str != '\0') {
+        const char *subPtr = sub;
+        // Check if the substring is found at the current position in the string
+        while (*subPtr != '\0' && *str == *subPtr) {
+            str++;
+            subPtr++;
+        }
+        // If the substring is fully matched, return success
+        if (*subPtr == '\0') {
+            return TRUE; // Substring found
+        }
+        // Move back to the beginning of the substring and continue checking
+        str = str - (subPtr - sub) + 1;
+    }
+    return FALSE;
+}
+
+
+/*Function that fetches a number from EEPROm
+id = 1: starting from address 10 -> 18
+id = 2: starting from address 19 -> 27
+..
+*/
+static void APP_getContactNumber(uint8 contact_id){
+    uint16 i = NUM_BOOK_START_ADDR + (contact_id-1)*9;
+    uint16 end_location = NUM_BOOK_START_ADDR + (contact_id)*9;
+    uint8 j =0;
+    char num [9];
+    for ( ; i < end_location; i++, j++){
+        num[j] = EEPROM_readByte(i);
+    }
+    APP_strCat(g_contact_number, "+01", num);
+}
+
+static boolean APP_findNumber(char * number){
+    for (uint8 i = 1; i <= g_no_of_contacts; i++){
+        APP_getContactNumber(i);
+        if(APP_strCmp(g_contact_number, number)) {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+
+static boolean APP_codeCheck(char * message){
 
 }
 
-void APP_switchUARTAccess(APP_UART_Access access_granted) {
+static void APP_storeNewEntry(char * number){
+
+}
+
+static void APP_switchUARTAccess(APP_UART_Access access_granted) {
     if (access_granted == GPS){
         // USART_setCallBackFunction();
         GPIO_writePin(PORTB_ID, PIN3_ID, LOGIC_LOW);
@@ -145,20 +233,39 @@ void APP_switchUARTAccess(APP_UART_Access access_granted) {
     
 }
 
-void APP_sendCoordinates(char * number) {
+static void APP_sendCoordinates(char * number, char * special_message) {
     char msg_to_send [TRANS_MSG_MAX_LENGTH];
+    char location_hyperlink [LOCATION_HLINK_LENGTH];
     APP_switchUARTAccess(GPS);
-    /*GPS_getCoordinates(msg_to_send)*/
+    /*GPS_getCoordinates(location_hyperlink)*/
     APP_switchUARTAccess(GSM);
+    APP_strCat(msg_to_send, special_message, location_hyperlink);
     GSM_sendMsg(number, msg_to_send, g_msg_buff, g_buff_index);
 }
 
 void APP_timerTickIncrement(void){
 	g_timer1_tick++;
 }
-
 void APP_bufferRecieve(void){
     g_msg_buff[g_buff_index] = UDR;	    /* copy UDR (received value) to buffer */
 	g_buff_index++;
 	g_info_received_flag = TRUE;		/* flag for new message arrival */
+}
+
+uint8 APP_getCOVal(){
+    return (MQ_getCOPercentage(MQ_ReadSensor()/g_Ro));
+}
+
+boolean APP_COThresholdExceeded(){
+    return MQ_getDigIP();
+}
+/**/
+void APP_fireEmergency(TIMER_ConfigType * const timer1_configPtr){
+    TIMER_init(timer1_configPtr);
+    while (g_timer1_tick < 1); // wait for 3 seconds and check again for CO Threshold
+	TIMER_deInit(TIMER1_ID);
+    g_timer1_tick = 0;
+    if(!APP_COThresholdExceeded()){
+        return;
+    }
 }

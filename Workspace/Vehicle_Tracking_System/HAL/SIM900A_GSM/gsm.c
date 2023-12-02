@@ -12,7 +12,6 @@ boolean GSM_init(char * message_buffer){
 	USART_sendString(NO_ECHO_CMD);
 	_delay_ms(500); /*half a second response time*/
 	if(strstr(message_buffer,"OK")){ /*write your own GSM_subStrfind() function*/
-		memset(message_buffer,0,MSG_BUFFER_SIZE); /*you might want to consider dynamic allocation*/
 		USART_sendString(TEXT_MODE_CMD);
 		return TRUE;
 	}
@@ -35,7 +34,6 @@ boolean GSM_isMsgReceived(char * message_buffer, char * message_location){
 			message_location[i++]= message_buffer[buf_ptr];				      /* copy location of received message where it is stored */
 		}
 		message_location[i] = '\0';
-		memset(message_buffer,0,MSG_BUFFER_SIZE);
 		return TRUE;
 	}
 }
@@ -69,7 +67,6 @@ boolean GSM_readMsgContents(char * message_location, char * message_buffer, char
 			buf_ptr++;
 		}
 		recieved_message[i] = '\0';
-		memset(message_buffer,0,MSG_BUFFER_SIZE);
 		return TRUE;
 	}
 }
@@ -81,7 +78,7 @@ void GSM_sendMsg(char * number, char * message_to_send, char * message_buffer, c
 	_delay_ms(500);
 	while(TRUE)
 	{
-		if(message_buffer[message_buffer]==0x3e) /*'>' character*/
+		if(message_buffer[*buff_ptr]==0x3e) /*'>' character*/
 		{
 		   buff_ptr = 0;
 		   memset(message_buffer,0,MSG_BUFFER_SIZE);
