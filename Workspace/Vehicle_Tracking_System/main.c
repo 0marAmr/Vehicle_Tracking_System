@@ -37,6 +37,11 @@ int main(void){
 			.timer_prescaler.timer1 = TIMER1_F_CPU_1024,
 			.timer_ocx_pin_behavior = DISCONNECT_OCX,
 	};
+	
+	ADC_ConfigType adc_configuration = {
+			.prescaler = F_CPU_8,
+			.ref_volt = ADC_InternalVoltageRef
+	};
 
 	/*set timer1 call back function*/
 	TIMER_setCallBackFunc(TIMER1_ID, APP_timerTickIncrement);
@@ -44,6 +49,7 @@ int main(void){
 	USART_init(&uart_config);
 	BUZZER_init();
 	GPIO_setupPinDirection(PORTB_ID, PIN3_ID, PIN_OUTPUT); /*Initialize Relay Pin*/
+	ADC_init(&adc_configuration);
 	APP_init();
 
 	LCD_clearScreen();
