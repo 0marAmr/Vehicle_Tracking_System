@@ -120,8 +120,7 @@ void APP_decodeMsg(char * number, char * received_msg, TIMER_ConfigType * const 
             }
             return;
         break;
-        case 'C':
-        break;
+
     }
 
     if (!APP_findNumber(number)){
@@ -234,7 +233,7 @@ static void APP_storeNewEntry(char * number){
 
 static void APP_switchUARTAccess(APP_UART_Access access_granted) {
     if (access_granted == GPS){
-        // USART_setCallBackFunction();
+        USART_setCallBackFunction();
         GPIO_writePin(PORTB_ID, PIN3_ID, LOGIC_LOW);
     }
     else if (access_granted == GSM){

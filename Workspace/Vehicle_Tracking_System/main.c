@@ -72,5 +72,5 @@ int main(void){
 			APP_fireEmergency(&timer1_config);
 		}
 		
-	} /*end super loop*/
+	}
 }

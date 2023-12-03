@@ -22,7 +22,6 @@
 #define MSG_LOC_BUFFER_SIZE 	4
 #define DIAL_NO_LENGTH 			14
 #define REC_MSG_MAX_LENGTH		16
-#define LOCATION_HLINK_LENGTH   100
 #define TRANS_MSG_MAX_LENGTH    150
 
 /*"E0" turns off the echoing of characters. When echoing is off,
