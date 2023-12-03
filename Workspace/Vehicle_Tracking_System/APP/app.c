@@ -13,7 +13,7 @@
 
 char g_msg_buff [MSG_BUFFER_SIZE];        
 char g_contact_number [DIAL_NO_LENGTH];
-char g_confirmation_code [CONF_CODE_LENGTH];
+char g_confirmation_code [CONFIRM_CODE_LENGTH];
 boolean g_info_received_flag = FALSE;
 volatile char g_buff_index = 0;
 
@@ -50,7 +50,7 @@ void APP_init(void){
     g_no_of_contacts = EEPROM_read(7); 
 
     if (!(g_code_config_flag == '$')){ /*special char that indicates the code has been configured*/
-        APP_defaultConfirmCode();
+        APP_storeConfirmCode("VTS100");
     }
     
 }
@@ -91,7 +91,7 @@ D:(msg: "DISP ...") simply display a message on the LCD screen
 E:(msg: "ENT VTS100") new phone entry 
 L:(msg: "LOC")  send the current location
 B:(msg: "BUZ")  activate the buzzer for 5 sec
-C: (msg: "CNFG {old_code} {new_code}") change confirmation code
+C:(msg: "CNFG {old_code} {new_code}") change confirmation code
 */
 void APP_decodeMsg(char * number, char * received_msg, TIMER_ConfigType * const timer1_configPtr){
     char * disp_msg;
@@ -112,13 +112,15 @@ void APP_decodeMsg(char * number, char * received_msg, TIMER_ConfigType * const 
                 LCD_clearScreen();
                 LCD_displayStringRowColumn(0,0,"No: ");
                 LCD_displayString(number);
-		    	LCD_displayStringRowColumn(1, 0,"Was Stored Successfully !");
+		    	LCD_displayStringRowColumn(1, 0," Was Stored !");
             }
             else {
                 LCD_clearScreen();
                 LCD_displayStringRowColumn(0,0,"Wrong Confirmation Code !");
             }
             return;
+        break;
+        case 'C':
         break;
     }
 
@@ -137,7 +139,7 @@ void APP_decodeMsg(char * number, char * received_msg, TIMER_ConfigType * const 
             TIMER_init(timer1_configPtr);
             while (g_timer1_tick < 2);
 	        TIMER_deInit(TIMER1_ID);
-            BUZZER_start();
+            BUZZER_stop();
             g_timer1_tick = 0;
         break;        
     }
@@ -189,6 +191,7 @@ static boolean APP_isSUbStr(const char *str, const char *sub) {
 /*Function that fetches a number from EEPROm
 id = 1: starting from address 10 -> 18
 id = 2: starting from address 19 -> 27
+id = 3: starting from address 28 -> 36
 ..
 */
 static void APP_getContactNumber(uint8 contact_id){
@@ -212,12 +215,20 @@ static boolean APP_findNumber(char * number){
     return FALSE;
 }
 
-
-static boolean APP_codeCheck(char * message){
-
+static boolean APP_codeCheck(char * code){
+    code += 4; // discard the first 4 characters
+    return APP_strCmp(code, g_confirmation_code);
 }
 
 static void APP_storeNewEntry(char * number){
+    uint16 i = g_no_of_contacts * 9 + NUM_BOOK_START_ADDR;
+    uint8 j = 4;
+    uint16 end_location = g_no_of_contacts * 9 + NUM_BOOK_START_ADDR + 8;
+    for (; i < end_location; i++, j++){
+        EEPROM_storeByte(i,number[j]);
+    }
+    g_no_of_contacts++;
+    EEPROM_storeByte(7,g_no_of_contacts);
 
 }
 
@@ -259,13 +270,35 @@ uint8 APP_getCOVal(){
 boolean APP_COThresholdExceeded(){
     return MQ_getDigIP();
 }
-/**/
+
 void APP_fireEmergency(TIMER_ConfigType * const timer1_configPtr){
+    uint8 i;
     TIMER_init(timer1_configPtr);
     while (g_timer1_tick < 1); // wait for 3 seconds and check again for CO Threshold
 	TIMER_deInit(TIMER1_ID);
     g_timer1_tick = 0;
     if(!APP_COThresholdExceeded()){
-        return;
+        return; 
     }
+    for ( i = 1; i <= g_no_of_contacts; i++){
+        APP_getContactNumber(i);
+        APP_sendCoordinates(g_contact_number,"Fire Emergency: ");
+    }
+    BUZZER_start();
+    while (APP_COThresholdExceeded());
+    BUZZER_stop();
+}
+
+static void APP_storeConfirmCode(const char * conf_code){
+    for(uint8 i = 0; i < CONFIRM_CODE_LENGTH; i++) {
+        EEPROM_storeByte(i, conf_code[i]);
+    }
+    APP_strCat(g_confirmation_code, conf_code, "");
+}
+
+static void APP_readConfirmCode(const char * conf_code){
+    for(uint8 i = 0; i < CONFIRM_CODE_LENGTH-1; i++) {
+        g_confirmation_code[i] = EEPROM_readByte(i);
+    }
+    g_confirmation_code[CONFIRM_CODE_LENGTH-1] = '\0';
 }
