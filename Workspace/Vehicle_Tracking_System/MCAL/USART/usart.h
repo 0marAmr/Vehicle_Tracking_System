@@ -18,6 +18,7 @@
 #include "../../Utils/std_types.h"
 #include "../../Utils/common_macros.h"
 #include <util/delay.h>
+#include <avr/interrupt.h>
 
 /*******************************************************************************
  *                                Definitions                                  *
@@ -89,6 +90,14 @@ typedef enum{
 	TX_RISING_RX_FALLING, TX_FALLING_RX_RISING
 }USART_ClockPolarity;
 
+typedef enum{
+	TX_INTERRUPT_DISABLED, TX_INTERRUPT_ENABLED
+}USART_TXCompleteIntEN;
+
+typedef enum{
+	RX_INTERRUPT_DISABLED, RX_INTERRUPT_ENABLED
+}USART_RXCompleteIntEN;
+
 typedef struct{
 	uint32 usart_baud_rate;
 	USART_BitMode usart_bit_mode;
@@ -96,6 +105,8 @@ typedef struct{
 	USART_ModeSelect usart_mode;
 	USART_ParityType usart_parity;
 	USART_ClockPolarity usart_clock_config;
+	USART_TXCompleteIntEN usart_tx_interrupt; 
+	USART_RXCompleteIntEN usart_rx_interrupt;
 }USART_ConfigType;
 
 /*******************************************************************************

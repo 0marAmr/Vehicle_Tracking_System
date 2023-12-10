@@ -24,7 +24,7 @@
  */
 void LCD_init(void){
 	/*Configure RS pin and Enable pin as output pins */
-	GPIO_setupPinDirection(LCD_RS_PORT_IwD, LCD_RS_PIN_ID, PIN_OUTPUT);
+	GPIO_setupPinDirection(LCD_RS_PORT_ID, LCD_RS_PIN_ID, PIN_OUTPUT);
 	GPIO_setupPinDirection(LCD_E_PORT_ID, LCD_E_PIN_ID, PIN_OUTPUT);
 
 	_delay_ms(20); /* LCD Power ON delay > 15ms */

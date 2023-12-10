@@ -30,8 +30,18 @@ float32 g_Ro;
  *                      Functions Prototypes(Private)                          *
  *******************************************************************************/
 
-// add prototypes here
-
+static void APP_readConfirmCode(const char * conf_code);
+static void APP_storeConfirmCode(const char * conf_code);
+static void APP_sendCoordinates(char * number, char * special_message);
+static void APP_switchUARTAccess(APP_UART_Access access_granted);
+static void APP_storeNewEntry(char * number);
+static boolean APP_codeCheck(char * code);
+static boolean APP_findNumber(char * number);
+static void APP_getContactNumber(uint8 contact_id);
+static boolean APP_isSUbStr(const char *str, const char *sub) ;
+static void APP_strCat(char * result, const char * str1, const char * str2);
+static boolean APP_strCmp(char * str1, char * str2);
+static void APP_flushBuffer();
 
 /*******************************************************************************
  *                     		 Functions Definitions                             *
@@ -39,12 +49,12 @@ float32 g_Ro;
 
 void APP_init(void){
     APP_switchUARTAccess(GSM);
-    while(!GSM_init(g_msg_buff)){
-        LCD_clearScreen();
-		LCD_displayStringRowColumn(0,0,"   Detecting");
-		LCD_displayStringRowColumn(1,0,"  GSM Module");
-	}
+    LCD_clearScreen();
+	LCD_displayStringRowColumn(0,0," Detecting GSM");
+	LCD_displayStringRowColumn(1,0,"     Module");
+    while(!GSM_init(g_msg_buff));
     APP_flushBuffer();
+    g_info_received_flag = FALSE;
     /* get number of contacts saved in EEPROM (saved in address 7 by default)*/
     g_code_config_flag = EEPROM_read(6); 
     g_no_of_contacts = EEPROM_read(7); 
@@ -153,7 +163,7 @@ static boolean APP_strCmp(char * str1, char * str2){
     return strcmp(str1, str2) == 0;
 }
 
-static void APP_strCat(char * result, const char * str1, const char * str2) {
+static void APP_strCat(char * result, const char * str1, const char * str2){
     char *resultPtr = result;
     while (*str1 != '\0') {
         *resultPtr = *str1;
@@ -168,7 +178,7 @@ static void APP_strCat(char * result, const char * str1, const char * str2) {
     *resultPtr = '\0';
 }
 
-static boolean APP_isSUbStr(const char *str, const char *sub) {
+static boolean APP_isSUbStr(const char *str, const char *sub){
     while (*str != '\0') {
         const char *subPtr = sub;
         // Check if the substring is found at the current position in the string

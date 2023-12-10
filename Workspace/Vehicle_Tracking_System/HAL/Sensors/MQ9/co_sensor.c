@@ -11,6 +11,8 @@
 
 void MQ_init(void){
     GPIO_setupPinDirection(MQ_PORT_ID, MQ_PIN_ID, PIN_INPUT);
+    GPIO_setupPinDirection(PORTA_ID, SENSOR_OUTPUT_CHANNEL_ID, PIN_INPUT);
+
 }
 
 boolean MQ_getDigIP(void){

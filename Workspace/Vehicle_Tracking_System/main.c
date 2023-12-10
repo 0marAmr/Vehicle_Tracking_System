@@ -13,9 +13,6 @@
 
 
 
-
-
-
 int main(void){
 
 	char sender_number [DIAL_NO_LENGTH];
@@ -35,7 +32,7 @@ int main(void){
 			.timer_mode = COMPARE_MODE,
 			.timer_mode_data.ctc_compare_value = TIMER1_COMPARE_VALUE_3SEC,
 			.timer_prescaler.timer1 = TIMER1_F_CPU_1024,
-			.timer_ocx_pin_behavior = DISCONNECT_OCX,
+			.timer_ocx_pin_behavior = DISCONNECT_OCX
 	};
 	
 	ADC_ConfigType adc_configuration = {
@@ -71,6 +68,5 @@ int main(void){
 		if (APP_COThresholdExceeded()){
 			APP_fireEmergency(&timer1_config);
 		}
-		
 	}
 }

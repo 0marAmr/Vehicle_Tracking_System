@@ -14,15 +14,16 @@
 
 #include "usart.h"
 
-static volatile void (*g_USART_Call_Back_Ptr)(void);
+static volatile void (*g_USART_Call_Back_Ptr)(void) = NULL_PTR;
 
 void USART_setCallBackFunction(void (*Fun_Ptr)(void)){
 	g_USART_Call_Back_Ptr = Fun_Ptr;
 }
 
 ISR(USART_RXC_vect){
-
-	(*g_USART_Call_Back_Ptr)();
+	if (g_USART_Call_Back_Ptr != NULL_PTR){
+		(*g_USART_Call_Back_Ptr)();
+	}
 }
 
 
@@ -52,7 +53,8 @@ void USART_init(const USART_ConfigType * const a_usartConfigPtr){
 	 * UCSZ2 = 1/0 For 9/other data bit mode
 	 * RXB8 & TXB8 not used for 8-bit data mode
 	 ***********************************************************************/
-	UCSRB = ((a_usartConfigPtr->usart_bit_mode & 0x04)) | (1<<TXEN) | (1<<RXEN);
+	UCSRB = ((a_usartConfigPtr->usart_bit_mode & 0x04)) | (1<<TXEN) | (1<<RXEN) | (a_usartConfigPtr->usart_rx_interrupt<<RXCIE)\
+			|(a_usartConfigPtr->usart_tx_interrupt<<TXCIE);
 
 	/************************** UCSRC Description **************************
 	 * URSEL   = 1 The URSEL must be one when writing the UCSRC

@@ -32,8 +32,15 @@ typedef enum{
 /*******************************************************************************
  *                      Functions Prototypes                                   *
  *******************************************************************************/
+void APP_init(void);
+void APP_MQSenCalibration();
 boolean APP_isMsgReceived(char * sender_number, char * received_msg);
-
+void APP_decodeMsg(char * number, char * received_msg, TIMER_ConfigType * const timer1_configPtr);
 void APP_timerTickIncrement(void);
+void APP_bufferRecieve(void);
+uint8 APP_getCOVal();
+boolean APP_COThresholdExceeded();
+void APP_fireEmergency(TIMER_ConfigType * const timer1_configPtr);
+
 
 #endif /* APP_APP_H_ */
